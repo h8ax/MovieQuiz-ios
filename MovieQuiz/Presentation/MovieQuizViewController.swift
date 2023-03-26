@@ -3,6 +3,8 @@ import UIKit
 final class MovieQuizViewController: UIViewController {
    
     
+    @IBOutlet private var noButton: UIButton!
+    @IBOutlet private var yesButton: UIButton!
     @IBOutlet private var textView: UILabel!
     @IBOutlet private var counterView: UILabel!
     @IBOutlet private var imageView: UIImageView!
@@ -80,13 +82,17 @@ final class MovieQuizViewController: UIViewController {
         showNextQuestionOrResults()
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 0
+        imageView.layer.cornerRadius = 20
     }
+ 
     
     private func show(quiz step: QuizStepViewModel) {
-    imageView.image = step.image
-    counterView.text = step.questionNumber
-    textView.text = step.question
-    imageView.layer.cornerRadius = 20
+        imageView.image = step.image
+        counterView.text = step.questionNumber
+        textView.text = step.question
+        
+        noButton.isEnabled = true
+        yesButton.isEnabled = true
     }
     
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
@@ -95,7 +101,8 @@ final class MovieQuizViewController: UIViewController {
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)")
     }
-    
+   
+
     private func showAnswerResult(isCorrect: Bool) {
         
         if isCorrect {
@@ -151,7 +158,12 @@ final class MovieQuizViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
-     func showNextQuestionOrResults() {
+    func showNextQuestionOrResults() {
+        noButton.isEnabled = false
+        yesButton.isEnabled = false
+        
+        imageView.layer.borderColor = UIColor.clear.cgColor
+        
         if currentQuestionIndex == questions.count - 1 {
             let text = "Ваш результат: \(correctAnswers) из 10"
             let viewModel = QuizResultsViewModel(
@@ -166,8 +178,8 @@ final class MovieQuizViewController: UIViewController {
             
             show(quiz: viewModel)
         }
-        
     }
+    
     
 }
 
