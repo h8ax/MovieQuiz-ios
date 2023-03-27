@@ -8,6 +8,7 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private var textView: UILabel!
     @IBOutlet private var counterView: UILabel!
     @IBOutlet private var imageView: UIImageView!
+    
     private var correctAnswers: Int = 0
     private var currentQuestionIndex: Int = 0
     struct QuizQuestion {
@@ -79,10 +80,14 @@ final class MovieQuizViewController: UIViewController {
    
     override func viewDidLoad() {
         super.viewDidLoad()
-        showNextQuestionOrResults()
+        let firstQuestion = self.questions[self.currentQuestionIndex]
+        let viewModel = self.convert(model: firstQuestion)
+        show(quiz: viewModel)
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 0
         imageView.layer.cornerRadius = 20
+        view.backgroundColor = UIColor.ypBackground
+       
     }
  
     

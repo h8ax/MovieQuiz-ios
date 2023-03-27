@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F0C1A4229D16E33000D7EA9 /* YS Display-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F79B46829CAD032007ABF13 /* YS Display-Medium.ttf */; };
 		2FE680F829D02D0200A06AA2 /* YS Display-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F79B46729CAD032007ABF13 /* YS Display-Bold.ttf */; };
 		AD1ABAB22831907B00B3E448 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1ABAB12831907B00B3E448 /* AppDelegate.swift */; };
 		AD1ABAB42831907B00B3E448 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD1ABAB32831907B00B3E448 /* SceneDelegate.swift */; };
@@ -168,6 +169,7 @@
 				AD1ABABB2831907F00B3E448 /* Assets.xcassets in Resources */,
 				AD1ABAB92831907B00B3E448 /* Main.storyboard in Resources */,
 				2FE680F829D02D0200A06AA2 /* YS Display-Bold.ttf in Resources */,
+				2F0C1A4229D16E33000D7EA9 /* YS Display-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
