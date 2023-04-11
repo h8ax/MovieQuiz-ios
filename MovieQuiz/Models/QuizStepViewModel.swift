@@ -10,6 +10,6 @@ import Foundation
 
 struct QuizStepViewModel {
     let image: UIImage
-    let question: String // fixed name here
+    let question: String 
     let questionNumber: String
 }
