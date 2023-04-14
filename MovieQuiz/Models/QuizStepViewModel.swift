@@ -8,8 +8,14 @@
 import UIKit
 import Foundation
 
-struct QuizStepViewModel {
+
+
+ struct QuizStepViewModel {
     let image: UIImage
-    let question: String 
+    let text: String
     let questionNumber: String
 }
+
+
+
+
