@@ -37,37 +37,51 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         alertPresent = AlertPresenter(viewController: self)
         statisticService = StatisticServiceImplementation()
         
+        activityIndicator.hidesWhenStopped = true
         
         showLoadingIndicator()
         questionFactory?.loadData()
-        
     }
     
     // MARK: - QuestionFactoryDelegate
     
     private func showLoadingIndicator() {
-        activityIndicator.isHidden = false
         activityIndicator.startAnimating()
     }
     
+    private func hideLoadingIndicator() {
+        activityIndicator.stopAnimating()
+    }
+    
+    
     private func showNetworkError(message: String) {
-           
-        
-        let model = AlertModel(
+        let alertModel = AlertModel(
             title: "Ошибка",
             message: message,
             buttonText: "Попробовать еще раз") { [weak self] in
-                guard let self = self else {return}
+                guard let self = self else { return }
                 self.currentQuestionIndex = 0
                 self.correctAnswear = 0
-                
                 self.questionFactory?.requestNextQuestion()
             }
-          alertPresent?.show(alertModel: model)
+        alertPresent?.show(alertModel: alertModel)
     }
     
+    func presentErrorAlert(with message: String) {
+        let alertController = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
+        
+        
+        let retryAction = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
+            self?.questionFactory?.loadData()
+        }
+        alertController.addAction(retryAction)
+        
+        present(alertController, animated: true, completion: nil)
+    }
+
+    
     func didLoadDataFromServer() {
-        activityIndicator.isHidden = true
+        hideLoadingIndicator()
         questionFactory?.requestNextQuestion()
     }
 
@@ -79,7 +93,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     func didReceiveNextQuestion(question: QuizQuestion?) {
         self.currentQuestion = question
         let viewModel = self.convert(model: question ?? question!)
-           self.show(quize: viewModel)
+        self.show(quize: viewModel)
+        self.hideLoadingIndicator()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -142,8 +157,7 @@ private func show(quiz result: QuizResultViewModel) {
         if currentQuestionIndex == questionsAmount - 1 {
             showFinalResult()
         } else {
-            currentQuestionIndex += 1 // увеличиваем индекс текущего урока на 1; таким образом мы сможем получить следующий
-            // показать следующий вопрос
+            currentQuestionIndex += 1 
             questionFactory?.requestNextQuestion()
         }
     }
