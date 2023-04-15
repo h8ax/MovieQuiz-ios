@@ -7,7 +7,6 @@
 import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
-    
     private let moviesLoader: MoviesLoading
     private weak var delegate: QuestionFactoryDelegate?
     private var movies: [MostPopularMovie] = []
@@ -31,29 +30,17 @@ final class QuestionFactory: QuestionFactoryProtocol {
             }
         }
     }
-    private func randomAssumedValue() -> Int {
-        let value = Int(arc4random_uniform(4) + 6) 
-        return value
-    }
-        
+    
     func requestNextQuestion() {
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
-            
-            let index = (0..<self.movies.count).randomElement() ?? 0
-            guard let movie = self.movies[safe: index] else {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.delegate?.didFailToLoadData(with: NSError(domain: "QuestionFactory", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to load movie data"]))
-                }
+            guard let movie = self.randomMovie() else {
+                self.delegate?.didFailToLoadData(with: NSError(domain: "QuestionFactory", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to load movie data"]))
                 return
             }
             
             guard let imageData = try? Data(contentsOf: movie.resizedImageURL) else {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.delegate?.didFailToLoadData(with: NSError(domain: "QuestionFactory", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to load movie poster"]))
-                }
+                self.delegate?.didFailToLoadData(with: NSError(domain: "QuestionFactory", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to load movie poster"]))
                 return
             }
             
@@ -71,8 +58,18 @@ final class QuestionFactory: QuestionFactoryProtocol {
             }
         }
     }
-
+    
+    private func randomMovie() -> MostPopularMovie? {
+        if movies.isEmpty {
+            loadData()
+            return nil
+        }
+        
+        let index = (0..<movies.count).randomElement() ?? 0
+        return self.movies[safe: index]
+    }
 }
+
 
     
  /*   private let questions: [QuizQuestion] = [

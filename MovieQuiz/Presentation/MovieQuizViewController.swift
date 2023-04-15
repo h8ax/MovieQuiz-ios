@@ -8,6 +8,14 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
+    func didFailToLoadQuestion(with error: Error) {
+        let alertController = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "ОК", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+
+    
     
     
     @IBOutlet private var noButton: UIButton!
@@ -55,29 +63,29 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     
     private func showNetworkError(message: String) {
-        let alertModel = AlertModel(
-            title: "Ошибка",
-            message: message,
-            buttonText: "Попробовать еще раз") { [weak self] in
-                guard let self = self else { return }
-                self.currentQuestionIndex = 0
-                self.correctAnswear = 0
-                self.questionFactory?.requestNextQuestion()
-            }
-        alertPresent?.show(alertModel: alertModel)
+        DispatchQueue.main.async { [weak self] in
+            let alertModel = AlertModel(
+                title: "Ошибка",
+                message: message,
+                buttonText: "Попробовать еще раз") { [weak self] in
+                    guard let self = self else { return }
+                    self.currentQuestionIndex = 0
+                    self.correctAnswear = 0
+                    self.questionFactory?.requestNextQuestion()
+                }
+            self?.alertPresent?.show(alertModel: alertModel)
+        }
     }
-    
+
     func presentErrorAlert(with message: String) {
         let alertController = UIAlertController(title: "Ошибка", message: message, preferredStyle: .alert)
-        
-        
         let retryAction = UIAlertAction(title: "Повторить", style: .default) { [weak self] _ in
             self?.questionFactory?.loadData()
         }
         alertController.addAction(retryAction)
-        
         present(alertController, animated: true, completion: nil)
     }
+
 
     
     func didLoadDataFromServer() {
@@ -87,8 +95,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
     func didFailToLoadData(with error: Error) {
         showNetworkError(message: error.localizedDescription)
-
     }
+    
 
     func didReceiveNextQuestion(question: QuizQuestion?) {
         self.currentQuestion = question
@@ -97,6 +105,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         self.hideLoadingIndicator()
     }
     
+    func didFinishQuiz() {
+        statisticService?.store(correct: correctAnswear, total: questionsAmount)
+    }
+
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
