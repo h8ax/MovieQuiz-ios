@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct QuizResultViewModel {
   let title: String
