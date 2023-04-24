@@ -61,7 +61,15 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
                 self.presenter.restartGame()
             }
             
+            action.setValue("RestartButtonIdentifier", forKey: "accessibilityIdentifier")
             alertModel.addAction(action)
+            
+            alertModel.view.accessibilityIdentifier = "Game results"
+            
+            if let gameResultsButton = alertModel.view.subviews.first(where: { $0.accessibilityIdentifier == "GameResults" }) as? UIButton {
+                   gameResultsButton.accessibilityIdentifier = "RestartButtonIdentifier"
+               }
+            
             self.present(alertModel, animated: true, completion: nil)
         }
         
@@ -97,6 +105,9 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
             
             alert.addAction(action)
             
+            if let button = alert.preferredAction?.value(forKey: "view") as? UIView {
+                button.accessibilityIdentifier = "RestartButtonIdentifier"
+            }
             self.present(alert, animated: true, completion: nil)
         }
     }

@@ -13,8 +13,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     private let statisticService: StatisticService!
     private var questionFactory: QuestionFactoryProtocol?
-    private var viewController: MovieQuizViewControllerProtocol!
-    var currentQuestion: QuizQuestion?
+    private weak var viewController: MovieQuizViewControllerProtocol?
+     var currentQuestion: QuizQuestion?
     private let questionsAmount: Int = 10
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
@@ -75,9 +75,9 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     
     func convert(model: QuizQuestion) -> QuizStepViewModel {
         QuizStepViewModel(
-            image: UIImage(data: model.image) ?? UIImage(), // распаковываем картинку
+            image: UIImage(data: model.image) ?? UIImage(),
             text: model.text, // берём текст вопроса
-            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)") // высчитываем номер вопроса
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }
     
     func yesButtonClicked() {
@@ -95,7 +95,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         proceedWithAnswer(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
-    func proceedWithAnswer(isCorrect: Bool) {
+    private func proceedWithAnswer(isCorrect: Bool) {
         didAnswer(isCorrectAnswer: isCorrect)
         
         viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
