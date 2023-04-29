@@ -5,15 +5,12 @@
 //  Created by H8AX on 14.04.2023.
 //
 
+
 import Foundation
 
 protocol MoviesLoading {
     func loadMovies(handler: @escaping (Result<MostPopularMovies, Error>) -> Void)
 }
-
-
-
-
 
 struct MoviesLoader: MoviesLoading {
     // MARK: - NetworkClient
@@ -21,9 +18,8 @@ struct MoviesLoader: MoviesLoading {
     
     // MARK: - URL
     private var mostPopularMoviesUrl: URL {
-        
-        guard let url = URL(string: "https://imdb-api.com/en/API/Top250Movies/k_gca86ooq") else {
-            preconditionFailure("Unable to construct mostPopularMoviesUrl")
+        guard let url = URL(string: "https://imdb-api.com/en/API/MostPopularMovies/k_gca86ooq") else {
+            preconditionFailure("Unable to construct mostPopularMoviesUrl") // Если мы не смогли преобразовать строку в URL, то наше приложение упадёт с ошибкой
         }
         return url
     }
@@ -43,5 +39,4 @@ struct MoviesLoader: MoviesLoading {
             }
         }
     }
-    
 }

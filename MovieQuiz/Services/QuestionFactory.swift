@@ -4,6 +4,9 @@
 //
 //  Created by H8AX on 10.04.2023.
 //
+//
+
+
 import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
